@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeVerse - The Ultimate Coding & AI Blog</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #0a0a2b;
+            color: #fff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation Bar */
+        nav {
+            position: sticky;
+            top: 0;
+            background: rgba(10, 10, 43, 0.95);
+            backdrop-filter: blur(12px);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: box-shadow 0.3s;
+        }
+
+        nav.scrolled {
+            box-shadow: 0 0 15px rgba(0, 230, 255, 0.5);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #00e6ff;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 1.5rem;
+            font-size: 1rem;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #00e6ff;
+            transform: translateY(-3px);
+        }
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            font-size: 1.8rem;
+            color: #00e6ff;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .hamburger.active .fa-bars {
+            display: none;
+        }
+
+        .hamburger.active .fa-times {
+            display: block;
+            transform: rotate(180deg);
+            transition: transform 0.3s;
+        }
+
+        .hamburger .fa-times {
+            display: none;
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 80%;
+            height: 100vh;
+            background: rgba(10, 10, 43, 0.98);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: left 0.3s ease;
+            z-index: 1000;
+        }
+
+        .mobile-menu.active {
+            left: 0;
+        }
+
+        .mobile-menu a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.8rem;
+            margin: 1.5rem 0;
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: opacity 0.3s, transform 0.3s;
+        }
+
+        .mobile-menu.active a {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .mobile-menu a:hover {
+            color: #00e6ff;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 5%;
+            background: linear-gradient(135deg, #0a0a2b, #1c1c5a);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 230, 255, 0.2), transparent 70%);
+            animation: pulse 8s infinite;
+            z-index: 0;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease-out;
+            z-index: 1;
+        }
+
+        .hero h1 span {
+            color: #00e6ff;
+            text-shadow: 0 0 12px #00e6ff;
+        }
+
+        .typing {
+            font-size: 1.5rem;
+            color: #ccc;
+            height: 2rem;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .typing span {
+            display: block;
+            animation: type 8s infinite;
+        }
+
+        .hero-btn {
+            margin-top: 2rem;
+            padding: 1rem 2rem;
+            background: #00e6ff;
+            color: #0a0a2b;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            z-index: 1;
+        }
+
+        .hero-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 25px #00e6ff;
+            animation: pulseBtn 1.5s infinite;
+        }
+
+        /* Content Section */
+        .content {
+            padding: 5rem 5%;
+            background: #0a0a2b;
+        }
+
+        .content-wrapper {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .sidebar {
+            width: 25%;
+            position: sticky;
+            top: 80px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0, 230, 255, 0.3);
+            max-height: calc(100vh - 100px);
+            overflow-y: auto;
+        }
+
+        .sidebar h2 {
+            font-size: 1.8rem;
+            color: #00e6ff;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar-link {
+            display: block;
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 500;
+            padding: 0.8rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 8px;
+            transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+            opacity: 0;
+            animation: fadeInLeft 0.5s forwards;
+            animation-delay: calc(0.1s * var(--index));
+        }
+
+        .sidebar-link:hover,
+        .sidebar-link.active {
+            background: #00e6ff;
+            color: #0a0a2b;
+            box-shadow: 0 0 10px rgba(0, 230, 255, 0.5);
+        }
+
+        .main-content {
+            width: 75%;
+        }
+
+        .main-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: #00e6ff;
+            text-shadow: 0 0 8px #00e6ff;
+        }
+
+        .cards {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 2rem;
+            border-radius: 15px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateX(-50px);
+        }
+
+        .card.visible {
+            opacity: 1;
+            transform: translateX(0);
+            transition: opacity 0.5s, transform 0.5s;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 0 25px rgba(0, 230, 255, 0.5);
+        }
+
+        .card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+            color: #00e6ff;
+        }
+
+        .card .preview {
+            font-size: 1rem;
+            color: #ccc;
+            margin-bottom: 1.5rem;
+        }
+
+        .read-more {
+            padding: 0.8rem 1.5rem;
+            background: #00e6ff;
+            color: #0a0a2b;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        .read-more:hover {
+            background: #00b8cc;
+            transform: scale(1.05);
+        }
+
+        .full-content {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease, opacity 0.5s ease;
+            margin-top: 1.5rem;
+            text-align: left;
+            color: #ddd;
+        }
+
+        .card.expanded .full-content {
+            max-height: 1000px;
+            opacity: 1;
+        }
+
+        .card.expanded .read-more {
+            background: #ff4444;
+        }
+
+        .card.expanded .read-more:hover {
+            background: #cc3333;
+        }
+
+        .full-content p {
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        /* Subscription Form */
+        .subscribe {
+            background: linear-gradient(135deg, #1c1c5a, #0a0a2b);
+            padding: 3rem 5%;
+            text-align: center;
+        }
+
+        .subscribe h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #00e6ff;
+        }
+
+        .subscribe-form {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            max-width: 600px;
+            margin: 2rem auto;
+        }
+
+        .subscribe-form input {
+            padding: 0.8rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            width: 70%;
+        }
+
+        .subscribe-form button {
+            padding: 0.8rem 1.5rem;
+            background: #00e6ff;
+            color: #0a0a2b;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        .subscribe-form button:hover {
+            background: #00b8cc;
+            transform: scale(1.05);
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, #1c1c5a, #0a0a2b);
+            padding: 3rem 5%;
+            text-align: center;
+            border-top: 3px solid #00e6ff;
+        }
+
+        footer .logo {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        footer p {
+            font-size: 1rem;
+            color: #ccc;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 1rem;
+            justify-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links a {
+            color: #00e6ff;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #00b8cc;
+            transform: rotate(10deg);
+        }
+
+        .footer-links i {
+            margin-right: 0.5rem;
+        }
+
+        .copyright {
+            font-size: 0.9rem;
+            color: #00e6ff;
+            opacity: 0.8;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInLeft {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes type {
+            0% { opacity: 0; transform: translateY(20px); }
+            10% { opacity: 1; transform: translateY(0); }
+            40% { opacity: 1; transform: translateY(0); }
+            50% { opacity: 0; transform: translateY(-20px); }
+            100% { opacity: 0; transform: translateY(-20px); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.2); opacity: 0.1; }
+            100% { transform: scale(1); opacity: 0.3; }
+        }
+
+        @keyframes pulseBtn {
+            0% { box-shadow: 0 0 10px #00e6ff; }
+            50% { box-shadow: 0 0 20px #00e6ff; }
+            100% { box-shadow: 0 0 10px #00e6ff; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .content-wrapper {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .main-content {
+                width: 100%;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .typing {
+                font-size: 1.2rem;
+            }
+
+            .hero-btn {
+                padding: 0.8rem 1.5rem;
+                font-size: 0.9rem;
+            }
+
+            .main-content h2 {
+                font-size: 2rem;
+            }
+
+            .cards {
+                flex-direction: column;
+            }
+
+            .subscribe-form {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .subscribe-form input {
+                width: 100%;
+            }
+
+            .subscribe-form button {
+                width: 50%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 1.5rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .mobile-menu a {
+                font-size: 1.4rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+
+            .card h3 {
+                font-size: 1.3rem;
+            }
+
+            footer .logo {
+                font-size: 1.5rem;
+            }
+
+            .footer-links a {
+                font-size: 1rem;
+            }
+
+            .copyright {
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Custom CSS Variables for Sidebar Animation */
+        .sidebar-link:nth-child(1) { --index: 1; }
+        .sidebar-link:nth-child(2) { --index: 2; }
+        .sidebar-link:nth-child(3) { --index: 3; }
+        .sidebar-link:nth-child(4) { --index: 4; }
+        .sidebar-link:nth-child(5) { --index: 5; }
+        .sidebar-link:nth-child(6) { --index: 6; }
+        .sidebar-link:nth-child(7) { --index: 7; }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo">CodeVerse</div>
+        <div class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <a href="#blog">Blog</a>
+            <a href="#features">Features</a>
+            <a href="#contact">Contact</a>
+        </div>
+        <div class="hamburger">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-times"></i>
+        </div>
+    </nav>
+    <div class="mobile-menu">
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#blog">Blog</a>
+        <a href="#features">Features</a>
+        <a href="#contact">Contact</a>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <h1>Explore the <span>CodeVerse</span></h1>
+        <div class="typing">
+            <span>Master AI Development</span>
+            <span>Dive into Web Development</span>
+            <span>Create Epic Games</span>
+            <span>Build the Future</span>
+        </div>
+        <a href="#content" class="hero-btn">Start Exploring</a>
+    </section>
+
+    <!-- Content Section -->
+    <section id="content" class="content">
+        <div class="content-wrapper">
+            <aside class="sidebar">
+                <h2>Topics</h2>
+                <ul>
+                    <li><a href="#ai-development" class="sidebar-link" data-target="ai-development">AI Development</a></li>
+                    <li><a href="#web-development" class="sidebar-link" data-target="web-development">Web Development</a></li>
+                    <li><a href="#machine-learning" class="sidebar-link" data-target="machine-learning">Machine Learning</a></li>
+                    <li><a href="#game-development" class="sidebar-link" data-target="game-development">Game Development</a></li>
+                    <li><a href="#blockchain-development" class="sidebar-link" data-target="blockchain-development">Blockchain Development</a></li>
+                    <li><a href="#cybersecurity" class="sidebar-link" data-target="cybersecurity">Cybersecurity</a></li>
+                    <li><a href="#devops" class="sidebar-link" data-target="devops">DevOps</a></li>
+                </ul>
+            </aside>
+            <div class="main-content">
+                <h2>The Universe of Coding & AI</h2>
+                <div class="cards">
+                    <!-- AI Development -->
+                    <div class="card" id="ai-development">
+                        <h3>AI Development</h3>
+                        <p class="preview">AI transforms industries with intelligent systems. Learn to build AI models and understand their impact.</p>
+                        <button class="read-more" data-target="ai-development"><a href="ai-dev.html">Read More</a></button>
+                        <div class="full-content">
+                            <p>Artificial Intelligence (AI) development is at the forefront of technological innovation, enabling machines to mimic human intelligence. AI developers create systems that can learn, reason, and interact with the world using techniques like machine learning (ML), deep learning, and natural language processing (NLP).</p>
+                            <p><strong>Core Technologies</strong>: AI development relies on Python libraries like TensorFlow, PyTorch, and scikit-learn. Developers use neural networks to build models for tasks like image recognition or language translation. Data preprocessing, feature engineering, and model evaluation are critical skills.</p>
+                            <p><strong>Applications</strong>: AI powers chatbots, autonomous vehicles, and medical diagnostics. For example, AI models analyze X-ray images to detect diseases with higher accuracy than human doctors. In finance, AI detects fraudulent transactions in real-time.</p>
+                            <p><strong>Challenges</strong>: AI development faces issues like data bias, computational costs, and ethical dilemmas. Ensuring fairness in AI models requires diverse datasets and rigorous testing. The energy demands of training large models also raise environmental concerns.</p>
+                            <p><strong>Getting Started</strong>: Beginners can start with Python and explore free datasets on Kaggle. Online courses on platforms like Coursera or fast.ai provide hands-on experience. Building a simple AI model, like a spam email classifier, is a great first project.</p>
+                        </div>
+                    </div>
+
+                    <!-- Web Development -->
+                    <div class="card" id="web-development">
+                        <h3>Web Development</h3>
+                        <p class="preview">Build stunning websites and web apps that power the internet. Discover tools and trends.</p>
+                        <button class="read-more" data-target="web-development">Read More</button>
+                        <div class="full-content">
+                            <p>Web development is the art and science of creating websites and web applications. It’s divided into front-end (user interface), back-end (server-side logic), and full-stack (both). Web developers shape the internet’s look and functionality.</p>
+                            <p><strong>Front-End</strong>: Technologies like HTML, CSS, and JavaScript create interactive UIs. Frameworks like React, Vue.js, and Angular simplify building dynamic apps. Tools like Tailwind CSS enable rapid styling.</p>
+                            <p><strong>Back-End</strong>: Languages like Python (Django, Flask), JavaScript (Node.js), and PHP handle server logic, databases, and APIs. Databases like MySQL or MongoDB store user data securely.</p>
+                            <p><strong>Trends</strong>: Progressive Web Apps (PWAs) deliver app-like experiences in browsers. Serverless architectures, like AWS Lambda, reduce infrastructure management. Web3 technologies integrate blockchain for decentralized apps.</p>
+                            <p><strong>Challenges</strong>: Cross-browser compatibility, performance optimization, and security (e.g., preventing XSS attacks) are critical. Responsive design ensures sites work on all devices.</p>
+                            <p><strong>Getting Started</strong>: Learn HTML/CSS on freeCodeCamp, then add JavaScript. Build a portfolio site or a to-do app. Explore frameworks and deploy projects on Netlify or Vercel.</p>
+                        </div>
+                    </div>
+
+                    <!-- Machine Learning -->
+                    <div class="card" id="machine-learning">
+                        <h3>Machine Learning</h3>
+                        <p class="preview">Teach machines to learn from data. Explore algorithms, models, and real-world ML applications.</p>
+                        <button class="read-more" data-target="machine-learning">Read More</button>
+                        <div class="full-content">
+                            <p>Machine Learning (ML) is a subset of AI that enables systems to learn patterns from data without explicit programming. ML engineers build models for prediction, classification, and clustering.</p>
+                            <p><strong>Algorithms</strong>: Supervised learning (e.g., linear regression, SVMs), unsupervised learning (e.g., k-means clustering), and reinforcement learning power ML. Deep learning, using neural networks, excels in tasks like image and speech recognition.</p>
+                            <p><strong>Tools</strong>: Python dominates ML with libraries like scikit-learn, TensorFlow, and Keras. Jupyter Notebooks facilitate experimentation. Cloud platforms like Google Colab provide free GPUs for training.</p>
+                            <p><strong>Applications</strong>: ML drives recommendation systems (e.g., Netflix), fraud detection, and autonomous drones. In healthcare, ML predicts patient outcomes using electronic health records.</p>
+                            <p><strong>Challenges</strong>: Overfitting, data scarcity, and interpretability are hurdles. Techniques like regularization and transfer learning address these. Ethical concerns arise when ML models amplify biases.</p>
+                            <p><strong>Getting Started</strong>: Study linear algebra and statistics. Try ML projects like predicting house prices on Kaggle. Andrew Ng’s Coursera course is a great foundation.</p>
+                        </div>
+                    </div>
+
+                    <!-- Game Development -->
+                    <div class="card" id="game-development">
+                        <h3>Game Development</h3>
+                        <p class="preview">Create immersive worlds with code. Learn about game engines and the art of game dev.</p>
+                        <button class="read-more" data-target="game-development">Read More</button>
+                        <div class="full-content">
+                            <p>Game development combines coding, design, and storytelling to create interactive experiences. From indie 2D games to AAA titles, game devs bring virtual worlds to life.</p>
+                            <p><strong>Engines</strong>: Unity (C#) and Unreal Engine (C++) are popular. Godot, an open-source engine, is beginner-friendly. These tools handle rendering, physics, and audio.</p>
+                            <p><strong>Skills</strong>: Game devs need programming, 3D modeling, animation, and sound design. Multiplayer games require networking knowledge. AI in games uses pathfinding and behavior trees.</p>
+                            <p><strong>Trends</strong>: VR/AR games, powered by Oculus and Hololens, are growing. Cloud gaming (e.g., GeForce Now) reduces hardware barriers. NFTs and blockchain enable play-to-earn models.</p>
+                            <p><strong>Challenges</strong>: Optimizing performance for low-end devices, balancing gameplay, and crunch culture are issues. Debugging complex game logic requires patience.</p>
+                            <p><strong>Getting Started</strong>: Start with Unity’s tutorials or Brackeys’ YouTube series. Build a simple 2D game like Flappy Bird. Share projects on itch.io to get feedback.</p>
+                        </div>
+                    </div>
+
+                    <!-- Blockchain Development -->
+                    <div class="card" id="blockchain-development">
+                        <h3>Blockchain Development</h3>
+                        <p class="preview">Build decentralized apps with blockchain. Explore crypto, NFTs, and smart contracts.</p>
+                        <button class="read-more" data-target="blockchain-development">Read More</button>
+                        <div class="full-content">
+                            <p>Blockchain development creates secure, decentralized systems using distributed ledgers. It powers cryptocurrencies, NFTs, and Web3 applications.</p>
+                            <p><strong>Technologies</strong>: Ethereum is the leading platform for smart contracts, written in Solidity. Other blockchains include Solana and Polkadot. Tools like Truffle and Hardhat streamline development.</p>
+                            <p><strong>Applications</strong>: Blockchain enables DeFi (e.g., Uniswap), supply chain tracking, and digital identity. NFTs revolutionize digital ownership in art and gaming.</p>
+                            <p><strong>Challenges</strong>: Scalability (e.g., Ethereum’s gas fees), security (e.g., smart contract bugs), and regulatory uncertainty are hurdles. Layer-2 solutions like Polygon address scalability.</p>
+                            <p><strong>Getting Started</strong>: Learn Solidity on CryptoZombies. Build a simple smart contract, like a voting system. Use Remix IDE and deploy on testnets like Ropsten.</p>
+                        </div>
+                    </div>
+
+                    <!-- Cybersecurity -->
+                    <div class="card" id="cybersecurity">
+                        <h3>Cybersecurity</h3>
+                        <p class="preview">Protect systems from threats. Dive into ethical hacking, encryption, and security practices.</p>
+                        <button class="read-more" data-target="cybersecurity">Read More</button>
+                        <div class="full-content">
+                            <p>Cybersecurity focuses on safeguarding systems, networks, and data from attacks. As cyber threats grow, security experts are in high demand.</p>
+                            <p><strong>Domains</strong>: Ethical hacking, penetration testing, and cryptography are key. Tools like Wireshark, Metasploit, and Burp Suite aid in testing vulnerabilities.</p>
+                            <p><strong>Applications</strong>: Cybersecurity protects financial systems, healthcare records, and IoT devices. Zero-trust architectures ensure no user is blindly trusted.</p>
+                            <p><strong>Challenges</strong>: Evolving threats like ransomware and phishing require constant learning. Balancing security with usability is tricky.</p>
+                            <p><strong>Getting Started</strong>: Try Hack The Box or TryHackMe for hands-on labs. Learn Linux and networking basics. Pursue certifications like CEH or CompTIA Security+.</p>
+                        </div>
+                    </div>
+
+                    <!-- DevOps -->
+                    <div class="card" id="devops">
+                        <h3>DevOps</h3>
+                        <p class="preview">Streamline software delivery with DevOps. Learn about CI/CD, cloud, and automation.</p>
+                        <button class="read-more" data-target="devops">Read More</button>
+                        <div class="full-content">
+                            <p>DevOps bridges development and operations to deliver software faster and reliably. It emphasizes automation, collaboration, and continuous improvement.</p>
+                            <p><strong>Tools</strong>: Docker and Kubernetes manage containers. Jenkins and GitHub Actions automate CI/CD pipelines. Cloud platforms like AWS, Azure, and GCP host apps.</p>
+                            <p><strong>Practices</strong>: Infrastructure as Code (IaC) with Terraform automates setups. Monitoring tools like Prometheus ensure system health.</p>
+                            <p><strong>Challenges</strong>: Cultural resistance, tool complexity, and security integration (DevSecOps) are hurdles. Managing microservices requires robust orchestration.</p>
+                            <p><strong>Getting Started</strong>: Learn Git and Docker. Set up a CI/CD pipeline for a small app. Explore AWS Free Tier or Google Cloud’s tutorials.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Subscription Form -->
+    <section id="subscribe" class="subscribe">
+        <h2>Join the CodeVerse Community</h2>
+        <p>Get the latest coding tips, AI insights, and tutorials delivered to your inbox.</p>
+        <form class="subscribe-form">
+            <input type="email" id="email" placeholder="Enter your email" required>
+            <button type="submit">Subscribe</button>
+        </form>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="logo">CodeVerse</div>
+        <p>Empowering the next generation of coders with cutting-edge knowledge.</p>
+        <div class="footer-links">
+            <a href="https://x.com" target="_blank"><i class="fab fa-x-twitter"></i>X</a>
+            <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin"></i>LinkedIn</a>
+            <a href="https://github.com" target="_blank"><i class="fab fa-github"></i>GitHub</a>
+            <a href="mailto:contact@codeverse.com"><i class="fas fa-envelope"></i>Contact Us</a>
+            <a href="#subscribe"><i class="fas fa-newspaper"></i>Newsletter</a>
+        </div>
+        <div class="copyright">© 2025 CodeVerse. All rights reserved.</div>
+    </footer>
+
+    <script>
+        // Hamburger Menu Toggle
+        const hamburger = document.querySelector('.hamburger');
+        const mobileMenu = document.querySelector('.mobile-menu');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+        });
+
+        document.querySelectorAll('.mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                mobileMenu.classList.remove('active');
+            });
+        });
+
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Typing Animation
+        const typingText = document.querySelectorAll('.typing span');
+        let index = 0;
+
+        function rotateText() {
+            typingText.forEach((text, i) => {
+                text.style.display = i === index ? 'block' : 'none';
+            });
+            index = (index + 1) % typingText.length;
+        }
+
+        setInterval(rotateText, 2000);
+
+        // Expandable Cards and Sidebar Links
+        document.querySelectorAll('.read-more, .sidebar-link').forEach(element => {
+            element.addEventListener('click', (e) => {
+                const targetId = e.target.getAttribute('data-target');
+                const card = document.getElementById(targetId);
+                const isExpanded = card.classList.contains('expanded');
+
+                document.querySelectorAll('.card').forEach(c => {
+                    c.classList.remove('expanded');
+                    c.querySelector('.read-more').textContent = 'Read More';
+                });
+
+                document.querySelectorAll('.sidebar-link').forEach(link => {
+                    link.classList.remove('active');
+                });
+
+                if (!isExpanded) {
+                    card.classList.add('expanded');
+                    card.querySelector('.read-more').textContent = 'Read Less';
+                    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    document.querySelector(`.sidebar-link[data-target="${targetId}"]`).classList.add('active');
+                }
+            });
+        });
+
+        // Subscription Form
+        document.querySelector('.subscribe-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            alert(`Thank you for subscribing with ${email}!`);
+            document.getElementById('email').value = '';
+        });
+
+        // Scroll Animations
+        const elements = document.querySelectorAll('.card, .main-content h2');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        elements.forEach(el => {
+            observer.observe(el);
+        });
+
+        // Navbar Glow on Scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+</html>
